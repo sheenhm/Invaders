@@ -627,6 +627,9 @@ public class GameScreen extends Screen {
 					if (!this.ship.isDestroyed()) {
 						this.ship.destroy();
 						this.lives--;
+						if (lives==0) {
+							this.ship.clearEntity(this.ship, this.ship.getPositionX, this.ship.getPositionY);
+						}
 						this.logger.info("Hit on player1 ship, " + this.lives
 								+ " lives remaining.");
 					}
@@ -637,6 +640,9 @@ public class GameScreen extends Screen {
 					if (!this.ship2.isDestroyed()) {
 						this.ship2.destroy();
 						this.lives2--;
+						if (lives==0) {
+							this.ship.clearEntity(this.ship, this.ship.getPositionX, this.ship.getPositionY);
+						}
 						this.logger.info("Hit on player2 ship, " + this.lives2
 								+ " lives remaining.");
 					}
