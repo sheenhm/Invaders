@@ -36,7 +36,9 @@ public class ScoreScreen extends Screen {
 	/** 2p's lives left. */
 	private int livesRemaining2;
 	/** Total bullets shot by the players. */
-	private int bulletsShot;
+	private int bulletsShot1;
+
+	private int bulletsShot2;
 	/** Total ships destroyed by the player. */
 	private int shipsDestroyed;
 	/** List of past high scores. */
@@ -74,7 +76,8 @@ public class ScoreScreen extends Screen {
 			this.livesRemaining2 = gameState.getLivesRemaining2p();
 		}
 
-		this.bulletsShot = gameState.getBulletsShot1() + gameState.getBulletsShot2();
+		this.bulletsShot1 = gameState.getBulletsShot1();
+		this.bulletsShot2 = gameState.getBulletsShot2();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
 		this.isNewRecord = false;
 		this.name = "AAA".toCharArray();
@@ -191,7 +194,7 @@ public class ScoreScreen extends Screen {
 				this.isNewRecord);
 		drawManager.drawResults(this, this.score, this.livesRemaining1,
 				this.shipsDestroyed, (float) this.shipsDestroyed
-						/ this.bulletsShot, this.isNewRecord);
+						/ this.bulletsShot1, this.isNewRecord);
 
 		if (this.isNewRecord)
 			drawManager.drawNameInput(this, this.name, this.nameCharSelected);
@@ -209,7 +212,7 @@ public class ScoreScreen extends Screen {
 				this.isNewRecord);
 		drawManager.drawResults(this, this.score, this.livesRemaining1, this.livesRemaining2,
 				this.shipsDestroyed, (float) this.shipsDestroyed
-						/ this.bulletsShot, this.isNewRecord);
+						/ this.bulletsShot2, (float) this.shipsDestroyed / this.bulletsShot2, this.isNewRecord);
 
 		if (this.isNewRecord)
 			drawManager.drawNameInput(this, this.name, this.nameCharSelected);
