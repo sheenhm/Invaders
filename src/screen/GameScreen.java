@@ -673,7 +673,6 @@ public class GameScreen extends Screen {
 							this.logger.info("Hit on player1 ship, " + this.lives + " lives remaining.");
 						}
 					}
-
 					if (checkCollision(bullet, this.ship2) && !this.levelFinished && !this.ship2.isInvincible()) {
 						recyclable.add(bullet);
 						if (!this.ship2.isDestroyed()) {
