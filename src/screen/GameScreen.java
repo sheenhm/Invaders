@@ -6,11 +6,9 @@ import java.util.concurrent.TimeUnit;
 
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -658,19 +656,6 @@ public class GameScreen extends Screen {
 					}
 				}
 			}
-			this.shipsDestroyed += shipsDestroyed;
-
-			this.bullets.removeAll(recyclable);
-			Set<Item> recyclableItem = new HashSet<Item>();
-			for (Item item : this.items) {
-				if (checkCollision(item, this.ship) && !this.levelFinished) {
-					recyclableItem.add(item);
-					this.ship.getItemQueue().enque(item);
-				}
-			}
-			this.items.removeAll(recyclableItem);
-			BulletPool.recycle(recyclable);
-			ItemPool.recycle(recyclableItem);
 		}
 
 		if (gameState.getMode() == 2) {
@@ -734,24 +719,21 @@ public class GameScreen extends Screen {
 					}
 				}
 			}
-			this.shipsDestroyed += shipsDestroyed;
-			this.shipsDestroyed2 += shipsDestroyed2;
-
-			this.bullets.removeAll(recyclable);
-			Set<Item> recyclableItem = new HashSet<Item>();
-			for (Item item : this.items) {
-				if (checkCollision(item, this.ship) && !this.levelFinished) {
-					recyclableItem.add(item);
-					this.ship.getItemQueue().enque(item);
-				}
-			}
-			this.items.removeAll(recyclableItem);
-			BulletPool.recycle(recyclable);
-			if (gameState.getMode() == 2) {
-				BulletPool.recycle(recyclable);
-			}
-			ItemPool.recycle(recyclableItem);
 		}
+
+		Set<Item> recyclableItem = new HashSet<Item>();
+
+		for (Item item : this.items) {
+			if (checkCollision(item, this.ship) && !this.levelFinished) {
+				recyclableItem.add(item);
+				this.ship.getItemQueue().enque(item);
+			}
+		}
+
+		this.bullets.removeAll(recyclable);
+		this.items.removeAll(recyclableItem);
+		BulletPool.recycle(recyclable);
+		ItemPool.recycle(recyclableItem);
 	}
 
 
