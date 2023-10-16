@@ -484,7 +484,7 @@ public final class DrawManager {
 		drawCenteredRegularString(screen, accuracyString, screen.getHeight()
 				/ height + fontRegularMetrics.getHeight() * 8);
 		drawCenteredRegularString(screen, accuracyString2, screen.getHeight()
-				/ height + fontRegularMetrics.getHeight() * 8);
+				/ height + fontRegularMetrics.getHeight() * 10);
 	}
 
 	/**
