@@ -626,19 +626,17 @@ public class GameScreen extends Screen {
 		if (gameState.getMode() == 1) {
 			for (Bullet bullet : this.bullets) {
 				if (bullet.getSpeed() > 0) {
-					if (bullet.getShooter() == 0) { // Player 1's bullet
-						if (checkCollision(bullet, this.ship) && !this.levelFinished && !this.ship.isInvincible()) {
-							recyclable.add(bullet);
-							if (!this.ship.isDestroyed()) {
-								this.ship.destroy();
-								this.lives--;
-								this.logger.info("Hit on player1 ship, " + this.lives + " lives remaining.");
-							}
+					if (checkCollision(bullet, this.ship) && !this.levelFinished && !this.ship.isInvincible()) {
+						recyclable.add(bullet);
+						if (!this.ship.isDestroyed()) {
+							this.ship.destroy();
+							this.lives--;
+							this.logger.info("Hit on player1 ship, " + this.lives + " lives remaining.");
 						}
 					}
 				} else {
 					for (EnemyShip enemyShip : this.enemyShipFormation) {
-						if (bullet.getShooter() == 1 && !enemyShip.isDestroyed() && checkCollision(bullet, enemyShip)) {
+						if (!enemyShip.isDestroyed() && checkCollision(bullet, enemyShip)) {
 							shipsDestroyed++;
 							this.score += enemyShip.getPointValue();
 
@@ -660,6 +658,19 @@ public class GameScreen extends Screen {
 					}
 				}
 			}
+			this.shipsDestroyed += shipsDestroyed;
+
+			this.bullets.removeAll(recyclable);
+			Set<Item> recyclableItem = new HashSet<Item>();
+			for (Item item : this.items) {
+				if (checkCollision(item, this.ship) && !this.levelFinished) {
+					recyclableItem.add(item);
+					this.ship.getItemQueue().enque(item);
+				}
+			}
+			this.items.removeAll(recyclableItem);
+			BulletPool.recycle(recyclable);
+			ItemPool.recycle(recyclableItem);
 		}
 
 		if (gameState.getMode() == 2) {
