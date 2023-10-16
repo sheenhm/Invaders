@@ -4,9 +4,9 @@ import engine.DrawManager;
 import engine.GameState;
 
 public class EnemyShipA extends EnemyShip {
-    /** HP의 배율 */
+    /** Scale of HP */
     private final double HPPOWER = .8;
-    /** 제거시 올라가는 점수 */
+    /** Score earned upon removal */
     private final int POINT = 30;
     public EnemyShipA(final int positionX, final int positionY,
                       final DrawManager.SpriteType spriteType, final GameState gameState) {

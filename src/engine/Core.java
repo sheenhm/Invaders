@@ -113,8 +113,8 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			// TODO 1P mode와 2P mode 진입 구현
-			// TODO gameState 생성자에 따라 1P와 2P mode 구분
+			// TODO Implement entering 1P mode and 2P mode
+			// TODO Differentiate between 1P and 2P modes based on the gameState constructor
 			if(SelectScreen.gameMode == 1) gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
 			else gameState = new GameState(1, 0, MAX_LIVES, MAX_LIVES, 0, 0, 0, 0);
 

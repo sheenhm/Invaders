@@ -199,7 +199,7 @@ public class GameScreen extends Screen {
 		this.bullets = new HashSet<Bullet>();
 		this.items = new HashSet<Item>();
 
-		// Special input delay / countdown.
+		/** Special input delay / countdown. */
 		this.gameStartTime = System.currentTimeMillis();
 		this.inputDelay = Core.getCooldown(INPUT_DELAY);
 		this.inputDelay.reset();
@@ -601,7 +601,7 @@ public class GameScreen extends Screen {
 	}
 
 	/**
-	 * 아이템이 화면 아래나 Ship 닿을 시 아이템 청소
+	 * Clean up the item when it reaches below the screen or collides with the Ship
 	 * */
 	private void updateItems() {
 		Set<Item> recyclableItem = new HashSet<Item>();
@@ -791,7 +791,7 @@ public class GameScreen extends Screen {
 			inputManager.countH_d = 0;
 			inputManager.countH_u = 0;
 			inputManager.one = 0;
-			inputManager.speed = 0;
+		inputManager.speed = 0;
 			inputManager.two = 0;
 			inputManager.seven = 0;
 			inputManager.eight = 0;

@@ -28,7 +28,7 @@ public class EnemyShip extends Entity {
 	protected Cooldown animationCooldown;
 	/** Checks if the ship has been hit by a bullet. */
 	private boolean isDestroyed;
-	/** 난이도 조절에 사용할 현재 스테이트 */
+	/** Use the current state for difficulty adjustment */
 	private GameState gameState;
 	/** Values of the ship, in points, when destroyed. */
 	protected int pointValue;
@@ -37,10 +37,10 @@ public class EnemyShip extends Entity {
 
 	private int itemRange;
 
-	/** 적의 체력 */
+	/** Enemy health */
 	protected int HP;
 
-	/** 총알 속도 */
+	/** bullet speed */
 	private static final int BULLET_SPEED = 4;
 
 	/**
@@ -134,7 +134,7 @@ public class EnemyShip extends Entity {
 
 
 	/**
-	 * 랜덤으로 Item을 가진 EnemyShip 생성*/
+	 * Creating an enemy ship with a random item */
 	private boolean itemGenerator(int rand_int){
 		if(rand_int < (int)(RANDOM_BOUND * ITEM_PROPORTIOIN))
 			return true;
@@ -142,7 +142,7 @@ public class EnemyShip extends Entity {
 			return false;
 	}
 
-	/** EnemyShip이 아이템을 지닌 객체인지 확인 */
+	/** Checking if EnemyShip is an object with an item */
 	public final boolean hasItem(){
 		return this.hasItem;
 	}
