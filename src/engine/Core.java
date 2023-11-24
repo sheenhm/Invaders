@@ -179,7 +179,7 @@ public final class Core {
 				case 7:
 					// Game & score.
 					do {
-						gameState = new GameState(1, 0, MAX_LIVES, MAX_LIVES, 0, 0, 0, 0, SelectScreen.gameMode, SelectPvpModeScreen.isPvpMode);
+						gameState = new GameState(1, 0, MAX_LIVES, MAX_LIVES, 0, 0, 0, 0, SelectScreen.gameMode);
 						SoundManager.stopSound("menu");
 						int mode = gameState.getMode();
 						// One extra live every few levels.
@@ -237,7 +237,7 @@ public final class Core {
 										gameState.getBulletsShot1(),
 										gameState.getBulletsShot2(),
 										gameState.getShipsDestroyed(),
-										gameState.getShipsDestroyed2(), mode, true);
+										gameState.getShipsDestroyed2(), mode);
 							}
 							else {
 								//Team mode
@@ -250,7 +250,7 @@ public final class Core {
 										gameState.getBulletsShot2(),
 										gameState.getShipsDestroyed(),
 										gameState.getShipsDestroyed2(),
-										mode, false);
+										mode);
 							}
 						}
 						AchievementManager.getInstance().checkAchievements(gameState);
