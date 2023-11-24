@@ -18,6 +18,7 @@ import screen.*;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  *
  */
+//
 public final class Core {
 
 	/** Width of current screen. */
