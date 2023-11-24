@@ -9,21 +9,31 @@ import engine.FileManager;
 
 import java.awt.event.KeyEvent;
 import java.util.Map;
+import java.util.logging.Logger;
+
 
 public class SkinSelectionScreen extends Screen{
     private static final int SELECTION_TIME = 100;
+    private static final Logger LOGGER = Logger.getLogger(Core.class
+            .getSimpleName());
     private Cooldown selectionCooldown;
     private int skincode_1p=0;
     private int skincode_2p=0;
+    private int mode = 0;
     private FileManager fileManager;
 
     private static Map<DrawManager.SpriteType, boolean[][]> spriteMap;
 
-    public SkinSelectionScreen(final int width, final int height, final int fps) {
-
+    public SkinSelectionScreen(final int width, final int height, final int fps, final int gameMode) {
         super(width, height, fps);
-
-        this.returnCode = 7;
+        mode = gameMode;
+        LOGGER.info("skinselect recent mode " + mode);
+        if(mode == 1) {
+            this.returnCode = 7;
+        }
+        else if (mode == 2 || mode == 3) {
+            this.returnCode = 9;
+        }
         this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
         this.selectionCooldown.reset();
 

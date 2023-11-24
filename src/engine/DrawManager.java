@@ -1525,6 +1525,31 @@ public final class DrawManager {
 		}
 	}
 
+	public void drawSelectPvpModeScreen(Screen screen, boolean isPvpMode){
+		String selectString = "2P Select Mode";
+		String instructionsString =
+				"select with a+d / arrows, confirm with space";
+
+		backBufferGraphics.setColor(Color.GRAY);
+		drawCenteredRegularString(screen, instructionsString, screen.getHeight() / 5);
+		backBufferGraphics.setColor(Color.GREEN);
+		drawCenteredBigString(screen, selectString, screen.getHeight() / 8);
+		backBufferGraphics.drawString("2P MODE", screen.getWidth() / 5
+				- fontRegularMetrics.stringWidth("2P MODE") / 2 , screen.getHeight() / 8 * 3);
+
+		if(!isPvpMode) backBufferGraphics.setColor(Color.GREEN);
+		else backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("TEAM", screen.getWidth() / 10 * 6
+				- fontRegularMetrics.stringWidth("TEAM") / 2 , screen.getHeight()
+				/ 8 * 3 + fontRegularMetrics.getHeight() * 2);
+
+		if(isPvpMode) backBufferGraphics.setColor(Color.GREEN);
+		else backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("PVP", screen.getWidth() / 10 * 8
+				- fontRegularMetrics.stringWidth("PVP") / 2 , screen.getHeight()
+				/ 8 * 3 + fontRegularMetrics.getHeight() * 2);
+	}
+
 	public void drawSelect2PModeAndSkillModeScreen(Screen screen, int gameMode, boolean skillModeOn, boolean nextItem){
 		String selectString = "Select Mode";
 		String instructionsString =
