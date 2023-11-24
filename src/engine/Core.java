@@ -262,8 +262,9 @@ public final class Core {
 							if (returnCode == 1) break;
 						}
 					} while ((gameState.getMode() == 1 && gameState.getLivesRemaining1p() > 0)
-							|| (gameState.getMode() == 2 && (gameState.getLivesRemaining1p() > 0 || gameState.getLivesRemaining2p() > 0))
-							&& gameState.getLevel() <= NUM_LEVELS);
+							|| ((gameState.getMode() == 2 && (!SelectPvpModeScreen.isPvpMode) && (gameState.getLivesRemaining1p() > 0 || gameState.getLivesRemaining2p() > 0))
+							|| ((gameState.getMode() == 2 && (SelectPvpModeScreen.isPvpMode) && (gameState.getLivesRemaining1p() > 0 && gameState.getLivesRemaining2p() > 0)))
+							&& gameState.getLevel() <= NUM_LEVELS));
 
 					if (returnCode == 1) break;
 
@@ -284,7 +285,8 @@ public final class Core {
 								+ gameState.getBulletsShot2() + " bullets shot by 2p and "
 								+ gameState.getShipsDestroyed() + " ships destroyed.");
 					}
-					currentScreen = new ScoreScreen(width, height, FPS, gameState);
+					if (!SelectPvpModeScreen.isPvpMode) currentScreen = new ScoreScreen(width, height, FPS, gameState);
+					else currentScreen = new PvpResultScreen(width, height, FPS, gameState);
 					SoundManager.resetBGM();
 					SoundManager.stopSound("ship_moving");
 					SoundManager.playSound("BGM/B_Gameover", "B_gameover", true, true, 2f);

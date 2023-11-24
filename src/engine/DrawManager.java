@@ -628,6 +628,42 @@ public final class DrawManager {
 	}
 
 	/**
+	 * Draws game results for pvp mode.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 * @param livesRemaining1
+	 *            1p's lives remaining when finished.
+	 * @param livesRemaining2
+	 *            2p's lives remaining when finished.
+	 */
+	public void drawResults(final Screen screen,
+							final int livesRemaining1, final int livesRemaining2, final float accuracy, final float accuracy2) {
+		String lives1RemainingString = "1p's lives remaining " + livesRemaining1;
+		String lives2RemainingString = "2p's lives remaining " + livesRemaining2;
+		String accuracyString = String
+				.format("1p's accuracy %.2f%%", accuracy * 100);
+		String accuracyString2 = String
+				.format("2p's accuracy %.2f%%", accuracy2 * 100);
+
+
+		int height = 3;
+
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, lives1RemainingString,
+				screen.getHeight() / height + fontRegularMetrics.getHeight()
+						* 2);
+		drawCenteredRegularString(screen, lives2RemainingString,
+				screen.getHeight() / height + fontRegularMetrics.getHeight()
+						* 4);
+		drawCenteredRegularString(screen, accuracyString, screen.getHeight()
+				/ height + fontRegularMetrics.getHeight() * 8);
+		drawCenteredRegularString(screen, accuracyString2, screen.getHeight()
+				/ height + fontRegularMetrics.getHeight() * 10);
+
+	}
+
+	/**
 	 * Draws interactive characters for name input.
 	 *
 	 * @param screen
@@ -832,6 +868,32 @@ public final class DrawManager {
 				"Press Space to play again, Escape to exit";
 
 		int height = isNewRecord ? 4 : 3;
+
+		backBufferGraphics.setColor(Color.GREEN);
+		drawCenteredBigString(screen, gameOverString, screen.getHeight()
+				/ height - fontBigMetrics.getHeight() * 2);
+
+		if (acceptsInput)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.GRAY);
+		drawCenteredRegularString(screen, continueOrExitString,
+				screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
+	}
+	/**
+	 * Draws basic content of game over screen.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 * @param acceptsInput
+	 *            If the screen accepts input.
+	 */
+	public void drawGameOver(final Screen screen, final boolean acceptsInput, final String winner) {
+		String gameOverString = "Winner is "+winner;
+		String continueOrExitString =
+				"Press Space to play again, Escape to exit";
+
+		int height = 3;
 
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, gameOverString, screen.getHeight()
