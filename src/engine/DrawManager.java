@@ -18,10 +18,7 @@ import engine.AchievementManager.Achievement;
 import java.lang.Integer;
 
 import entity.*;
-import screen.GameScreen;
-import screen.Screen;
-import screen.SelectScreen;
-import screen.SettingScreen;
+import screen.*;
 
 
 /**
@@ -1217,7 +1214,7 @@ public final class DrawManager {
 	 * @param bonusLife
 	 *            Checks if a bonus life is received.
 	 */
-	public void drawCountDown(final Screen screen, final int level,
+	public void drawCountDown(final Screen screen, final String level,
 							  final int number, final boolean bonusLife) {
 		int rectWidth = screen.getWidth();
 		int rectHeight = screen.getHeight() / 6;
@@ -1227,9 +1224,16 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.GREEN);
 		if (number >= 4)
 			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3);
+				if (SelectPvpModeScreen.isPvpMode) {
+					drawCenteredBigString(screen,  level,
+							screen.getHeight() / 2
+									+ fontBigMetrics.getHeight() / 3);
+				}
+				else {
+					drawCenteredBigString(screen, "Level " + level,
+							screen.getHeight() / 2
+									+ fontBigMetrics.getHeight() / 3);
+				}
 			} else {
 				drawCenteredBigString(screen, "Level " + level
 								+ " - Bonus life!",

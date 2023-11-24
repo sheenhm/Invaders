@@ -837,8 +837,14 @@ public class GameScreen extends Screen {
 				SoundManager.playSound("SFX/S_LevelStart_b", "level_start_beep", false, false);
 			if ((beep<995 && beep>975))
 				SoundManager.playSound("SFX/S_LevelStart_a", "level_start_count", false, false);
-			drawManager.drawCountDown(this, this.level, countdown,
-					this.bonusLife);
+			if (!SelectPvpModeScreen.isPvpMode) {
+				drawManager.drawCountDown(this, String.valueOf(this.level), countdown,
+						this.bonusLife);
+			}
+			else {
+				drawManager.drawCountDown(this, "PVP Mode", countdown,
+						this.bonusLife);
+			}
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
 					/ 12, Color.GREEN);
 			drawManager.drawHorizontalLine(this, this.height / 2 + this.height
