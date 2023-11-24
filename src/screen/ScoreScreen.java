@@ -102,11 +102,9 @@ public class ScoreScreen extends Screen {
 
         this.shipsDestroyed1 = gameState.getShipsDestroyed();
         this.isNewRecord = false;
-        try {
-            this.name = Core.getFileManager().getCurrentPlayer().getName().toCharArray();
-        } catch (IOException e) {
-            logger.warning("An error occurred while accessing player data: " + e.getMessage());
-        }
+        
+        // Initialize player name and selection-related variables
+        this.name = getPlayerName();
         this.nameCharSelected = 0;
         this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
         this.selectionCooldown.reset();
@@ -127,6 +125,20 @@ public class ScoreScreen extends Screen {
             Core.getFileManager().resetPlayerItem();
         } catch (IOException e) {
             logger.warning("Couldn't reset item!");
+        }
+    }
+
+    /**
+     * Retrieves the player name from the file manager.
+     *
+     * @return The player name as a character array.
+     */
+    private char[] getPlayerName() {
+        try {
+            return Core.getFileManager().getCurrentPlayer().getName().toCharArray();
+        } catch (IOException e) {
+            logger.warning("An error occurred while accessing player data: " + e.getMessage());
+            return new char[0];
         }
     }
 
