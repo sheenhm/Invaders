@@ -30,9 +30,7 @@ public class SkinSelectionScreen extends Screen{
         if(mode == 1) {
             this.returnCode = 7;
         }
-        else if (mode == 2 || mode == 3) {
-            this.returnCode = 9;
-        }
+        else this.returnCode = 9;
         this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
         this.selectionCooldown.reset();
 
