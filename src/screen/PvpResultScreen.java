@@ -33,11 +33,6 @@ public class PvpResultScreen extends Screen {
     private final int bulletsShot1;
     private int bulletsShot2;
     /**
-     * Total ships destroyed by the player.
-     */
-    private final int shipsDestroyed1;
-    private int shipsDestroyed2;
-    /**
      * Time between changes in user selection.
      */
     private final Cooldown selectionCooldown;
@@ -58,8 +53,6 @@ public class PvpResultScreen extends Screen {
         this.bulletsShot1 = gameState.getBulletsShot1();
         this.livesRemaining2 = gameState.getLivesRemaining2p();
         this.bulletsShot2 = gameState.getBulletsShot2();
-        this.shipsDestroyed2 = gameState.getShipsDestroyed2();
-        this.shipsDestroyed1 = gameState.getShipsDestroyed();
         this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
         this.selectionCooldown.reset();
     }
@@ -102,8 +95,8 @@ public class PvpResultScreen extends Screen {
         String winner = "1p";
         if (this.livesRemaining2 > 0) winner = "2p";
         drawManager.drawGameOver(this, this.inputDelay.checkFinished(), winner);
-        drawManager.drawResults(this, this.livesRemaining1, this.livesRemaining2, (float) this.shipsDestroyed1
-                / this.bulletsShot1, (float) this.shipsDestroyed2 / this.bulletsShot2);
+        drawManager.drawResults(this, this.livesRemaining1, this.livesRemaining2, (3 - (float) this.livesRemaining2)
+                / this.bulletsShot1, (3 - (float) this.livesRemaining1) / this.bulletsShot2);
 
         drawManager.completeDrawing(this);
     }
