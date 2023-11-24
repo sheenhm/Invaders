@@ -224,12 +224,9 @@ public final class Core {
 									gameState.getShipsDestroyed2());
 						}
 						if(mode == 2){
-							LOGGER.info("현재 모드~~"+mode);
 
 							if (SelectPvpModeScreen.isPvpMode) {
 								//pvp mode
-								LOGGER.info("현재 모드~~3"+mode);
-								LOGGER.info("pvp모드~~"+gameState.getMode());
 								gameState = ((GameScreen) currentScreen).getGameStatePvp();
 								gameState = new GameState(
 										gameState.getLivesRemaining1p(),

@@ -27,7 +27,6 @@ public class SkinSelectionScreen extends Screen{
     public SkinSelectionScreen(final int width, final int height, final int fps, final int gameMode) {
         super(width, height, fps);
         mode = gameMode;
-        LOGGER.info("skinselect recent mode " + mode);
         if(mode == 1) {
             this.returnCode = 7;
         }

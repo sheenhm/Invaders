@@ -32,7 +32,6 @@ public class SelectPvpModeScreen extends Screen{
      */
     public SelectPvpModeScreen(int width, int height, int fps){
         super(width, height, fps);
-        LOGGER.info("pvp모드선택 현재 모드 " + gameMode);
         this.returnCode = 7;
         this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
         this.selectionCooldown.reset();
