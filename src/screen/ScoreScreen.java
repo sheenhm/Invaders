@@ -111,8 +111,9 @@ public class ScoreScreen extends Screen {
 
         AchievementManager.getInstance().checkScore(this.score);
 
+        // Load and update high scores
         loadHighScores();
-        
+
         try {
             Core.getFileManager().resetPlayerItem();
         } catch (IOException e) {
@@ -134,6 +135,9 @@ public class ScoreScreen extends Screen {
         }
     }
 
+    /**
+     * Loads high scores from the file manager and updates the new record status.
+     */
     private void loadHighScores() {
         try {
             this.highScores = Core.getFileManager().loadHighScores(this.gameMode);
@@ -143,11 +147,15 @@ public class ScoreScreen extends Screen {
         }
     }
 
+    /**
+     * Updates the new record status based on the current score and existing high scores.
+     */
     private void updateNewRecordStatus() {
         if (highScores.size() < MAX_HIGH_SCORE_NUM || highScores.get(highScores.size() - 1).getScore() < this.score) {
             this.isNewRecord = true;
         }
     }
+    
     /**
      * Starts the action.
      *
