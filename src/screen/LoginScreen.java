@@ -69,7 +69,7 @@ public class LoginScreen extends Screen {
 
 		draw();
 
-		if (canProcessInput()) {
+		if (isProcessInput()) {
 			processInput();
 		}
 	}
@@ -79,7 +79,7 @@ public class LoginScreen extends Screen {
 	 *
 	 * @return True if input processing is allowed, false otherwise.
 	 */
-	private boolean canProcessInput() {
+	private boolean isProcessInput() {
 		return selectionCooldown.checkFinished() && inputDelay.checkFinished();
 	}
 
