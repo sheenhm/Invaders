@@ -74,14 +74,27 @@ public class LoginScreen extends Screen {
 		}
 	}
 
+	/**
+	 * Checks whether it's allowed to process user input.
+	 *
+	 * @return True if input processing is allowed, false otherwise.
+	 */
 	private boolean canProcessInput() {
 		return selectionCooldown.checkFinished() && inputDelay.checkFinished();
 	}
 
+	/**
+	 * Retrieves the key that is currently pressed.
+	 *
+	 * @return The keycode of the pressed key, or null if no key is pressed.
+	 */
 	private Integer getPressedKey() {
 		return inputManager.getKeyCode();
 	}
 
+	/**
+	 * Processes user input.
+	 */
 	private void processInput() {
 		Integer pressedKey = getPressedKey();
 
@@ -90,6 +103,11 @@ public class LoginScreen extends Screen {
 		}
 	}
 
+	/**
+	 * Handles key presses based on the given keycode.
+	 *
+	 * @param key The keycode of the pressed key.
+	 */
 	private void handleKeyPress(int key) {
 		switch (key) {
 			case KeyEvent.VK_RIGHT:
@@ -112,30 +130,38 @@ public class LoginScreen extends Screen {
 		}
 	}
 
+	/** Handles right arrow key press */
 	private void handleRightKey() {
 		nameCharSelected = (nameCharSelected == 2) ? 0 : nameCharSelected + 1;
 		resetSelectionCooldown();
 	}
 
+	/** Handles left arrow key press */
 	private void handleLeftKey() {
 		nameCharSelected = (nameCharSelected == 0) ? 2 : nameCharSelected - 1;
 		resetSelectionCooldown();
 	}
 
+	/** Handles up arrow key press */
 	private void handleUpKey() {
 		updateNameChar(1);
 		resetSelectionCooldown();
 	}
 
+	/** Handles down arrow key press */
 	private void handleDownKey() {
 		updateNameChar(-1);
 		resetSelectionCooldown();
 	}
 
+	/**
+	 * Updates the selected character in the username based on the given offset.
+	 */
 	private void updateNameChar(int offset) {
 		name[nameCharSelected] = (char) ((name[nameCharSelected] == LAST_CHAR) ? FIRST_CHAR : name[nameCharSelected] + offset);
 	}
 
+	/** Handles the spacebar key press*/
 	private void handleSpaceKey() {
 		try {
 			processSpaceKey();
@@ -147,6 +173,9 @@ public class LoginScreen extends Screen {
 		isRunning = false;
 	}
 
+	/**
+	 * Saves a new player or loads an existing player based on the current username.
+	 */
 	private void processSpaceKey() throws IOException {
 		Player loadedPlayer = Core.getFileManager().loadPlayer(name);
 		if (loadedPlayer == null) {
