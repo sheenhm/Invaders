@@ -9,7 +9,8 @@ import engine.DrawManager.SpriteType;
 
 /**
  * Implements a enemy ship, to be destroyed by the player.
- * 
+ * Code Refactor Completed. (EnemyShip A, EnemyShip B, EnemyShip C -> EnemyShip)
+ *
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
