@@ -18,10 +18,7 @@ import engine.AchievementManager.Achievement;
 import java.lang.Integer;
 
 import entity.*;
-import screen.GameScreen;
-import screen.Screen;
-import screen.SelectScreen;
-import screen.SettingScreen;
+import screen.*;
 
 
 /**
@@ -631,6 +628,42 @@ public final class DrawManager {
 	}
 
 	/**
+	 * Draws game results for pvp mode.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 * @param livesRemaining1
+	 *            1p's lives remaining when finished.
+	 * @param livesRemaining2
+	 *            2p's lives remaining when finished.
+	 */
+	public void drawResults(final Screen screen,
+							final int livesRemaining1, final int livesRemaining2, final float accuracy, final float accuracy2) {
+		String lives1RemainingString = "1p's lives remaining " + livesRemaining1;
+		String lives2RemainingString = "2p's lives remaining " + livesRemaining2;
+		String accuracyString = String
+				.format("1p's accuracy %.2f%%", accuracy * 100);
+		String accuracyString2 = String
+				.format("2p's accuracy %.2f%%", accuracy2 * 100);
+
+
+		int height = 3;
+
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, lives1RemainingString,
+				screen.getHeight() / height + fontRegularMetrics.getHeight()
+						* 2);
+		drawCenteredRegularString(screen, lives2RemainingString,
+				screen.getHeight() / height + fontRegularMetrics.getHeight()
+						* 4);
+		drawCenteredRegularString(screen, accuracyString, screen.getHeight()
+				/ height + fontRegularMetrics.getHeight() * 8);
+		drawCenteredRegularString(screen, accuracyString2, screen.getHeight()
+				/ height + fontRegularMetrics.getHeight() * 10);
+
+	}
+
+	/**
 	 * Draws interactive characters for name input.
 	 *
 	 * @param screen
@@ -835,6 +868,32 @@ public final class DrawManager {
 				"Press Space to play again, Escape to exit";
 
 		int height = isNewRecord ? 4 : 3;
+
+		backBufferGraphics.setColor(Color.GREEN);
+		drawCenteredBigString(screen, gameOverString, screen.getHeight()
+				/ height - fontBigMetrics.getHeight() * 2);
+
+		if (acceptsInput)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.GRAY);
+		drawCenteredRegularString(screen, continueOrExitString,
+				screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
+	}
+	/**
+	 * Draws basic content of game over screen.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 * @param acceptsInput
+	 *            If the screen accepts input.
+	 */
+	public void drawGameOver(final Screen screen, final boolean acceptsInput, final String winner) {
+		String gameOverString = "Winner is "+winner;
+		String continueOrExitString =
+				"Press Space to play again, Escape to exit";
+
+		int height = 3;
 
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, gameOverString, screen.getHeight()
@@ -1217,7 +1276,7 @@ public final class DrawManager {
 	 * @param bonusLife
 	 *            Checks if a bonus life is received.
 	 */
-	public void drawCountDown(final Screen screen, final int level,
+	public void drawCountDown(final Screen screen, final String level,
 							  final int number, final boolean bonusLife) {
 		int rectWidth = screen.getWidth();
 		int rectHeight = screen.getHeight() / 6;
@@ -1227,9 +1286,16 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.GREEN);
 		if (number >= 4)
 			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3);
+				if (SelectPvpModeScreen.isPvpMode) {
+					drawCenteredBigString(screen,  level,
+							screen.getHeight() / 2
+									+ fontBigMetrics.getHeight() / 3);
+				}
+				else {
+					drawCenteredBigString(screen, "Level " + level,
+							screen.getHeight() / 2
+									+ fontBigMetrics.getHeight() / 3);
+				}
 			} else {
 				drawCenteredBigString(screen, "Level " + level
 								+ " - Bonus life!",
@@ -1523,6 +1589,31 @@ public final class DrawManager {
 			backBufferGraphics.drawString("ITEM", screen.getWidth() / 10 * 6
 					- fontRegularMetrics.stringWidth("ITEM") / 2 , screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 15);
 		}
+	}
+
+	public void drawSelectPvpModeScreen(Screen screen, boolean isPvpMode){
+		String selectString = "2P Select Mode";
+		String instructionsString =
+				"select with a+d / arrows, confirm with space";
+
+		backBufferGraphics.setColor(Color.GRAY);
+		drawCenteredRegularString(screen, instructionsString, screen.getHeight() / 5);
+		backBufferGraphics.setColor(Color.GREEN);
+		drawCenteredBigString(screen, selectString, screen.getHeight() / 8);
+		backBufferGraphics.drawString("2P MODE", screen.getWidth() / 5
+				- fontRegularMetrics.stringWidth("2P MODE") / 2 , screen.getHeight() / 8 * 3);
+
+		if(!isPvpMode) backBufferGraphics.setColor(Color.GREEN);
+		else backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("TEAM", screen.getWidth() / 10 * 6
+				- fontRegularMetrics.stringWidth("TEAM") / 2 , screen.getHeight()
+				/ 8 * 3 + fontRegularMetrics.getHeight() * 2);
+
+		if(isPvpMode) backBufferGraphics.setColor(Color.GREEN);
+		else backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("PVP", screen.getWidth() / 10 * 8
+				- fontRegularMetrics.stringWidth("PVP") / 2 , screen.getHeight()
+				/ 8 * 3 + fontRegularMetrics.getHeight() * 2);
 	}
 
 	public void drawSelect2PModeAndSkillModeScreen(Screen screen, int gameMode, boolean skillModeOn, boolean nextItem){
