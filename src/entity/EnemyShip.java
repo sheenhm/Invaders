@@ -4,15 +4,13 @@ import java.awt.Color;
 import java.util.Random;
 import java.util.Set;
 
-import engine.Cooldown;
-import engine.Core;
+import engine.*;
 import engine.DrawManager.SpriteType;
-import engine.GameState;
-import engine.SoundManager;
 
 /**
  * Implements a enemy ship, to be destroyed by the player.
- * 
+ * Code Refactor Completed. (EnemyShip A, EnemyShip B, EnemyShip C -> EnemyShip)
+ *
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
@@ -23,7 +21,6 @@ public class EnemyShip extends Entity {
 
 	public static final double ITEM_PROPORTION = 0.1;
 	public static final int RANDOM_BOUND = 10000;
-
 	/** Cooldown between sprite changes. */
 	protected Cooldown animationCooldown;
 	/** Checks if the ship has been hit by a bullet. */
@@ -32,37 +29,37 @@ public class EnemyShip extends Entity {
 	private GameState gameState;
 	/** Values of the ship, in points, when destroyed. */
 	protected int pointValue;
-
 	private boolean hasItem;
-
 	private int itemRange;
-
-	/** 적의 체력 */
 	protected int HP;
-
-	/** 총알 속도 */
 	protected static final int BULLET_SPEED = 4;
+
+	/** 총알의 속도 배율 */
+	private double bulletSpeedPower;
+	/** 슈팅 쿨다운 배율 */
+	private double bulletCooldown;
 
 	/**
 	 * Constructor, establishes the ship's properties.
-	 * 
-	 * @param positionX
-	 *            Initial position of the ship in the X axis.
-	 * @param positionY
-	 *            Initial position of the ship in the Y axis.
-	 * @param spriteType
-	 *            Sprite type, image corresponding to the ship.
+	 *
+	 * @param positionX  Initial position of the ship in the X axis.
+	 * @param positionY  Initial position of the ship in the Y axis.
+	 * @param spriteType Sprite type, image corresponding to the ship.
 	 */
 	public EnemyShip(final int positionX, final int positionY,
-					 final SpriteType spriteType, final GameState gameState) {
+					 final SpriteType spriteType, final GameState gameState,
+					 final double hpPower, final double bulletSpeedPower, final double bulletCooldown, final int point) {
 		super(positionX, positionY, 12 * 2, 8 * 2, Color.WHITE);
 		this.gameState = gameState;
+		this.bulletSpeedPower = bulletSpeedPower;
+		this.bulletCooldown = bulletCooldown;
+		this.pointValue = point;
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
 		this.isDestroyed = false;
 		this.itemRange =  new Random().nextInt(RANDOM_BOUND);
 		this.hasItem = itemGenerator(itemRange);
-		this.HP = this.gameState.getLevel();
+		this.HP = (int)(this.gameState.getLevel() * hpPower);
 	}
 
 	/**
@@ -99,18 +96,10 @@ public class EnemyShip extends Entity {
 		this.positionY += distanceY;
 	}
 
-	/**
-	 * Updates attributes, mainly used for animation purposes.
-	 */
-	public void update() {
-		return;
-	}
-
-	public void shoot(final Set<Bullet> bullets,Cooldown shootingCooldown) {
+	public final void shoot(final Set<Bullet> bullets, Cooldown shootingCooldown) {
 		bullets.add(BulletPool.getBullet(positionX
-				+ width / 2, positionY, BULLET_SPEED, 0));
-		shootingCooldown.timedown(0);
-
+				+ width / 2, positionY, (int)(BULLET_SPEED * bulletSpeedPower),0));
+		shootingCooldown.timedown(bulletCooldown);
 	}
 
 	/**
@@ -154,4 +143,16 @@ public class EnemyShip extends Entity {
 	}
 
 	public int getItemRange(){return this.itemRange;}
+
+	public final void update(SpriteType spriteType) {
+		if (this.animationCooldown.checkFinished()) {
+			this.animationCooldown.reset();
+
+			if (spriteType == SpriteType.EnemyShipA1) {
+				this.spriteType = SpriteType.EnemyShipA2;
+			} else if (spriteType == SpriteType.EnemyShipB1) {
+				this.spriteType = SpriteType.EnemyShipB2;
+			}
+		}
+	}
 }
