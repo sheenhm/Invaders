@@ -146,18 +146,12 @@ public class SoundManager {
         }
     }
 
-    public static void bgmSetting(boolean bgm){
-        if(bgm){
-            for(Clip clip : bgms){
-                FloatControl floatControl = (FloatControl)clip.getControl(Type.MASTER_GAIN);
-                floatControl.setValue(getValue(masterVolume));
-            }
-        }
-        else{
-            for(Clip clip : bgms){
-                FloatControl floatControl = (FloatControl)clip.getControl(Type.MASTER_GAIN);
-                floatControl.setValue(getValue(0));
-            }
+    public static void bgmSetting(boolean bgm) {
+        float targetVolume = bgm ? masterVolume : 0;
+
+        for (Clip clip : bgms) {
+            FloatControl floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            floatControl.setValue(getValue(targetVolume));
         }
     }
 
