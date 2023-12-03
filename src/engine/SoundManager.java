@@ -28,79 +28,48 @@ public class SoundManager {
     private static final float one = ((Math.abs(minimum)+Math.abs(maximum))/100);
     private static float master = getValue(masterVolume);
 
+    private static Clip clip;
+
     public static void playSound(String soundFilePathShort, String clipName, boolean isLoop, boolean isBgm) {
         String soundFilePath = "res/sound/"+soundFilePathShort+".wav";
-        Clip clip = clips.get(clipName);
+        clip = clips.get(clipName);
         if (clip != null && clip.isActive()) {
             return;
         }
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    File soundFile = new File(soundFilePath);
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-                    FloatControl floatControl = (FloatControl)clip.getControl(Type.MASTER_GAIN);
-                    floatControl.setValue(master);
-                    clips.put(clipName, clip);
-                    if(isBgm) {
-                        bgms.add(clip);
-                    } else {
-                        clip.addLineListener(event -> {
-                            if (event.getType() == LineEvent.Type.STOP) {
-                                clip.close();
-                            }
-                        });
-                    }
-                    if (isLoop) {
-                        clip.loop(-1);
-                    } else {
-                        clip.start();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        new Thread(() -> {
+            try {
+                File soundFile = new File(soundFilePath);
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioIn);
+                FloatControl floatControl = (FloatControl)clip.getControl(Type.MASTER_GAIN);
+                floatControl.setValue(master);
+                clips.put(clipName, clip);
+                if(isBgm) {
+                    bgms.add(clip);
+                } else {
+                    clip.addLineListener(event -> {
+                        if (event.getType() == LineEvent.Type.STOP) {
+                            clip.close();
+                        }
+                    });
                 }
+                if (isLoop) {
+                    clip.loop(-1);
+                } else {
+                    clip.start();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
     }
 
     public static void playSound(String soundFilePathShort, String clipName, boolean isLoop, boolean isBgm, float fadeInSpeed) {
-        String soundFilePath = "res/sound/"+soundFilePathShort+".wav";
-        Clip clip = clips.get(clipName);
-        if (clip != null && clip.isActive()) {
-            return;
+        playSound(soundFilePathShort,clipName,isLoop,isBgm);
+        if (clip != null) {
+            fadeIn(clip, fadeInSpeed);
         }
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    File soundFile = new File(soundFilePath);
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-                    FloatControl floatControl = (FloatControl) clip.getControl(Type.MASTER_GAIN);
-                    floatControl.setValue(minimum);
-                    clips.put(clipName, clip);
-                    if(isBgm) {
-                        bgms.add(clip);
-                    } else {
-                        clip.addLineListener(event -> {
-                            if (event.getType() == LineEvent.Type.STOP) {
-                                clip.close();
-                            }
-                        });
-                    }
-                    if (isLoop) {
-                        clip.loop(-1);
-                    } else {
-                        clip.start();
-                    }
-                    fadeIn(clip, fadeInSpeed);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     public static void stopSound(String clipName) {
