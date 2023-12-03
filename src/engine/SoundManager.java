@@ -136,15 +136,28 @@ public class SoundManager {
     public static void setMasterVolume(float volume) {
         masterVolume = volume;
         master = getValue(masterVolume);
-        if(master > maximum) master = maximum;
-        else if(master < minimum) master = minimum;
+        clipVolumeControl(master);
+    }
+
+    private static void clipVolumeControl(float volume) {
+        limitMasterVolume();
+        updateClipsVolume(volume);
+    }
+
+    private static void limitMasterVolume() {
+        if (master > maximum) master = maximum;
+        else if (master < minimum) master = minimum;
+    }
+
+    private static void updateClipsVolume(float volume) {
         for (Clip clip : clips.values()) {
             if (clip != null && clip.isActive()) {
-                FloatControl floatControl = (FloatControl) clip.getControl(Type.MASTER_GAIN);
-                floatControl.setValue(master);
+                FloatControl floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                floatControl.setValue(volume);
             }
         }
     }
+
 
     public static void bgmSetting(boolean bgm) {
         float targetVolume = bgm ? masterVolume : 0;
