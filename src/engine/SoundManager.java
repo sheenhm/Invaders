@@ -73,19 +73,14 @@ public class SoundManager {
     }
 
     public static void stopSound(String clipName) {
-        Clip clip = clips.get(clipName);
-        if (clip != null && clip.isActive()) {
-            bgms.remove(clip);
-            clips.remove(clipName);
-            clip.close();
-        }
+        stopSound(clipName, 0);
     }
 
     public static void stopSound(String clipName, float fadeoutSpeed) {
         Clip clip = clips.get(clipName);
         if (clip != null && clip.isActive()) {
-            new Thread(new Runnable() {
-                public void run() {
+            new Thread(() -> {
+                if(fadeoutSpeed != 0) {
                     FloatControl floatControl = (FloatControl) clips.get(clipName).getControl(Type.MASTER_GAIN);
                     float volume = masterVolume;
                     float tmpOne = volume/100;
@@ -105,10 +100,10 @@ public class SoundManager {
                             throw new RuntimeException(e);
                         }
                     }
-                    bgms.remove(clip);
-                    clips.remove(clipName);
-                    clip.close();
                 }
+                bgms.remove(clip);
+                clips.remove(clipName);
+                clip.close();
             }).start();
         }
     }
