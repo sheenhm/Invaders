@@ -168,15 +168,10 @@ public class SoundManager {
         }
     }
 
-    private static float getVolume(float res) {
-        double temp = (res - minimum) / one;
-        return (float) Math.pow(10, temp / 50);
-    }
-
-    private static float getValue(float volume){
-        float res = (float)(minimum + one*(50*Math.log10(volume)));
-        if(res<minimum) return minimum;
-        else if(res>maximum) return maximum;
+    public static float getValue(float volume) {
+        float res = (float)(minimum + one * (50 * Math.log10(volume)));
+        if (res < minimum) return minimum;
+        else if (res > maximum) return maximum;
         else return res;
     }
 
@@ -186,22 +181,10 @@ public class SoundManager {
         else return false;
     }
 
-    public static void setVolume(String clipName, float percent){
-        Clip clip = clips.get(clipName);
-        FloatControl floatcontrol = (FloatControl)clip.getControl(Type.MASTER_GAIN);
-        float volume = getVolume(floatcontrol.getValue());
-        floatcontrol.setValue(getValue((percent/100)*volume));
-    }
-
     public static void playBGM(int levelNum) {
         String soundFilePathShort = "BGM/B_Level" + Integer.toString(levelNum);
         String clipName = "level" + Integer.toString(levelNum);
         playSound(soundFilePathShort, clipName, true, true);
-    }
-
-    public static void stopBGM(int levelNum, float fadeOutSpeed) {
-        String clipName = "level" + Integer.toString(levelNum);
-        stopSound(clipName, fadeOutSpeed);
     }
 
     public static void resetBGM(){
@@ -209,5 +192,9 @@ public class SoundManager {
             String clipName = "level" + Integer.toString(i);
             stopSound(clipName);
         }
+    }
+
+    public static float getVolume() {
+        return masterVolume;
     }
 }
