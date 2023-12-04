@@ -219,21 +219,19 @@ public class Ship extends Entity {
     }
 
     public final void itemImpactUpdate() {
-        if (this.speed == this.originalSpeed + this.ITEM_SPEED_UP_VALUE) {
-            if (this.speedupCooldown.checkFinished()) resetSpeed();
-        } else if (this.Invincible) {
-            if (this.invincibleCooldown.checkFinished()) {
-                Color c = this.getColor();
-                if (c == Color.BLUE) {
-                    Invincible = false;
-                    changeColor(Color.GREEN);
-                } else if (c == Color.magenta) {
-                    Invincible = false;
-                    changeColor(Color.RED);
-                }
+        if ((this.speed == this.originalSpeed + this.ITEM_SPEED_UP_VALUE) && this.speedupCooldown.checkFinished()) {
+            resetSpeed();
+        } else if (this.Invincible && this.invincibleCooldown.checkFinished()) {
+            if (this.getColor() == Color.BLUE) {
+                Invincible = false;
+                this.changeColor(Color.GREEN);
+            } else if (this.getColor() == Color.magenta) {
+                Invincible = false;
+                this.changeColor(Color.RED);
             }
-        } else if (this.existAuxiliaryShips) {
-            if (this.auxiliaryCooldown.checkFinished()) setExistAuxiliaryShips(false);
+        }
+        else if (this.existAuxiliaryShips && this.auxiliaryCooldown.checkFinished()) {
+            setExistAuxiliaryShips(false);
         }
     }
 
@@ -258,13 +256,11 @@ public class Ship extends Entity {
     }
 
     public final void runInvincible() {
-        Color c = this.getColor();
-
-        if (c == Color.GREEN || c == Color.BLUE) {
+        if (this.getColor() == Color.GREEN || this.getColor() == Color.BLUE) {
             this.invincibleCooldown.reset();
             this.Invincible = true;
             this.changeColor(Color.BLUE);
-        } else if (c == Color.RED || c == Color.magenta) {
+        } else if (this.getColor() == Color.RED || this.getColor() == Color.magenta) {
             this.invincibleCooldown.reset();
             this.Invincible = true;
             this.changeColor(Color.magenta);
@@ -310,10 +306,10 @@ public class Ship extends Entity {
     }
 
     public void setOriginalSpeed(int originalSpeed) {
-        if(hasPurchasedSpeedItem){
+        if (hasPurchasedSpeedItem) {
             this.originalSpeed = originalSpeed;
             this.speed = this.originalSpeed + 2;
-        }else {
+        } else {
             this.originalSpeed = originalSpeed;
             this.speed = this.originalSpeed;
         }
