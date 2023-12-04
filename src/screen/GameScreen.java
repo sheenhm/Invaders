@@ -339,9 +339,9 @@ public class GameScreen extends Screen {
                     boolean moveLeft = inputManager.isKeyDown(Core.getKeySettingCode(0));
 
                     boolean isRightBorder = this.ship.getPositionX()
-                            + this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
+                            + this.ship.getWidth() + this.ship.getShipSpeed() > this.width - 1;
                     boolean isLeftBorder = this.ship.getPositionX()
-                            - this.ship.getSpeed() < 1;
+                            - this.ship.getShipSpeed() < 1;
 
                     if (moveRight && !isRightBorder) {
                         this.ship.moveRight();
@@ -432,14 +432,14 @@ public class GameScreen extends Screen {
                     boolean moveLeft2p = inputManager.isKeyDown(Core.getKeySettingCode(8));
 
                     boolean isRightBorder1p = this.ship.getPositionX()
-                            + this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
+                            + this.ship.getWidth() + this.ship.getShipSpeed() > this.width - 1;
                     boolean isLeftBorder1p = this.ship.getPositionX()
-                            - this.ship.getSpeed() < 1;
+                            - this.ship.getShipSpeed() < 1;
 
                     boolean isRightBorder2p = this.ship2.getPositionX()
-                            + this.ship2.getWidth() + this.ship2.getSpeed() > this.width - 1;
+                            + this.ship2.getWidth() + this.ship2.getShipSpeed() > this.width - 1;
                     boolean isLeftBorder2p = this.ship2.getPositionX()
-                            - this.ship2.getSpeed() < 1;
+                            - this.ship2.getShipSpeed() < 1;
 
                     if (moveRight1p && !isRightBorder1p && (this.lives > 0)) {
                         this.ship.moveRight();
@@ -1057,7 +1057,7 @@ public class GameScreen extends Screen {
 		if (per>0 && !this.levelFinished) {
 			if (per == 1 && !speedBoosted) { // s 연타 -> 1초간 속도 빨라지기
 				originalSpeed = ship.getOriginalSpeed();
-				ship.setSpeed(originalSpeed + 2);
+				ship.setShipSpeed(originalSpeed + 2);
 				this.logger.info("SpeedUp");
 
 				ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
@@ -1080,7 +1080,7 @@ public class GameScreen extends Screen {
 				this.bullet_count+=3;
 			}else if (per == 3 && !speedBoosted) { // s 연타 -> 1초간 속도 빨라지기
 				originalSpeed =  ship2.getOriginalSpeed();
-				ship2.setSpeed(originalSpeed + 2);
+				ship2.setShipSpeed(originalSpeed + 2);
 				this.logger.info("SpeedUp");
 
 				ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
