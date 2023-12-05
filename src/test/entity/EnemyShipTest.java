@@ -1,3 +1,5 @@
+package test.entity;
+
 import engine.DrawManager;
 import engine.GameState;
 import entity.EnemyShip;
