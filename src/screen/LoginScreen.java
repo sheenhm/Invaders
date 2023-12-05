@@ -18,9 +18,9 @@ public class LoginScreen extends Screen {
 
 	/** Milliseconds between changes in user selection. */
 	private static final int SELECTION_TIME = 200;
-	private final char[] name;
+	public final char[] name;
 	/** Character of players name selected for change. */
-	private int nameCharSelected;
+	public int nameCharSelected;
 	/** Time between changes in user selection. */
 	private final Cooldown selectionCooldown;
 	/** Code of first mayus character. */
@@ -131,25 +131,25 @@ public class LoginScreen extends Screen {
 	}
 
 	/** Handles right arrow key press */
-	private void handleRightKey() {
+	public void handleRightKey() {
 		nameCharSelected = (nameCharSelected == 2) ? 0 : nameCharSelected + 1;
 		resetSelectionCooldown();
 	}
 
 	/** Handles left arrow key press */
-	private void handleLeftKey() {
+	public void handleLeftKey() {
 		nameCharSelected = (nameCharSelected == 0) ? 2 : nameCharSelected - 1;
 		resetSelectionCooldown();
 	}
 
 	/** Handles up arrow key press */
-	private void handleUpKey() {
+	public void handleUpKey() {
 		updateNameChar(1);
 		resetSelectionCooldown();
 	}
 
 	/** Handles down arrow key press */
-	private void handleDownKey() {
+	public void handleDownKey() {
 		updateNameChar(-1);
 		resetSelectionCooldown();
 	}
@@ -157,7 +157,7 @@ public class LoginScreen extends Screen {
 	/**
 	 * Updates the selected character in the username based on the given offset.
 	 */
-	private void updateNameChar(int offset) {
+	public void updateNameChar(int offset) {
 		name[nameCharSelected] = (char) ((name[nameCharSelected] == LAST_CHAR) ? FIRST_CHAR : name[nameCharSelected] + offset);
 	}
 
@@ -176,7 +176,7 @@ public class LoginScreen extends Screen {
 	/**
 	 * Saves a new player or loads an existing player based on the current username.
 	 */
-	private void processSpaceKey() throws IOException {
+	public void processSpaceKey() throws IOException {
 		Player loadedPlayer = Core.getFileManager().loadPlayer(name);
 		if (loadedPlayer == null) {
 			Core.getFileManager().saveNewPlayer(name);
