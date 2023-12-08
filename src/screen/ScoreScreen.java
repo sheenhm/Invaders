@@ -114,11 +114,8 @@ public class ScoreScreen extends Screen {
         // Load and update high scores
         loadHighScores();
 
-        try {
-            Core.getFileManager().resetPlayerItem();
-        } catch (IOException e) {
-            logger.warning("Couldn't reset item!");
-        }
+        // Attempt to reset player items using the FileManager
+        resetPlayerItems();
     }
 
     /**
@@ -155,7 +152,19 @@ public class ScoreScreen extends Screen {
             this.isNewRecord = true;
         }
     }
-    
+
+    /**
+     * Attempts to reset player items using the FileManager.
+     * Logs a warning if the reset operation fails.
+     */
+    private void resetPlayerItems() {
+        try {
+            Core.getFileManager().resetPlayerItem();
+        } catch (IOException e) {
+            logger.warning("Couldn't reset item!");
+        }
+    }
+
     /**
      * Starts the action.
      *
