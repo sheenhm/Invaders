@@ -184,51 +184,77 @@ public class ScoreScreen extends Screen {
 
         if (gameMode == 1) {
             draw();
-        } else {
+        }
+        else if(gameMode == 2){
             draw2();
         }
 
         if (this.inputDelay.checkFinished()) {
-            if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
-                // Return to main menu.
-                this.returnCode = 1;
-                this.isRunning = false;
-                saveScore(gameMode);
-            } else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
-                // Play again.
-                this.returnCode = 7;
-                this.isRunning = false;
-                saveScore(gameMode);
-            }
-
+            // Handles input during the game record screen, allowing navigation back to the main menu or restarting the game.
+            handleExitRecordScreenInput();
+            
             if (this.isNewRecord && this.selectionCooldown.checkFinished()) {
-                if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)) {
-                    this.nameCharSelected = this.nameCharSelected == 2 ? 0
-                            : this.nameCharSelected + 1;
-                    this.selectionCooldown.reset();
-                }
-                if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
-                    this.nameCharSelected = this.nameCharSelected == 0 ? 2
-                            : this.nameCharSelected - 1;
-                    this.selectionCooldown.reset();
-                }
-                if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
-                    this.name[this.nameCharSelected] =
-                            (char) (this.name[this.nameCharSelected]
-                                    == LAST_CHAR ? FIRST_CHAR
-                                    : this.name[this.nameCharSelected] + 1);
-                    this.selectionCooldown.reset();
-                }
-                if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
-                    this.name[this.nameCharSelected] =
-                            (char) (this.name[this.nameCharSelected]
-                                    == FIRST_CHAR ? LAST_CHAR
-                                    : this.name[this.nameCharSelected] - 1);
-                    this.selectionCooldown.reset();
-                }
+                // Handles player name input during the record phase
+                handlePlayerNameInput();
             }
         }
 
+    }
+
+    /**
+     * Handles input during the game record screen, allowing navigation back to the main menu or restarting the game.
+     */
+    private void handleExitRecordScreenInput() {
+        if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
+            // Return to the main menu.
+            this.returnCode = 1;
+            this.isRunning = false;
+            saveScore(gameMode);
+        } else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
+            // Play again.
+            this.returnCode = 7;
+            this.isRunning = false;
+            saveScore(gameMode);
+        }
+    }
+
+
+    /**
+     * Handles player name input during the record phase, allowing navigation and modification of the player's name.
+     */
+    private void handlePlayerNameInput() {
+        if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)) {
+            if (this.nameCharSelected == 2) {
+                this.nameCharSelected = 0;
+            } else {
+                this.nameCharSelected += 1;
+            }
+            this.selectionCooldown.reset();
+        }
+        if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
+            if (this.nameCharSelected == 0) {
+                this.nameCharSelected = 2;
+            } else {
+                this.nameCharSelected -= 1;
+            }
+            this.selectionCooldown.reset();
+        }
+        if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
+            if (this.name[this.nameCharSelected] == LAST_CHAR) {
+                this.name[this.nameCharSelected] = (char) FIRST_CHAR;
+            } else {
+                this.name[this.nameCharSelected] = (char) (this.name[this.nameCharSelected] + 1);
+            }
+            this.selectionCooldown.reset();
+        }
+        if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
+            if (this.name[this.nameCharSelected] == FIRST_CHAR) {
+                this.name[this.nameCharSelected] = (char) LAST_CHAR;
+            } else {
+                this.name[this.nameCharSelected] = (char) (this.name[this.nameCharSelected] - 1);
+            }
+            this.selectionCooldown.reset();
+        }
     }
 
     /**
