@@ -2,9 +2,9 @@ package engine;
 
 /**
  * Implements an object that stores the state of the game between levels.
- * 
+ *
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- * 
+ *
  */
 public class GameState {
 
@@ -29,7 +29,7 @@ public class GameState {
 	private int gameMode = 0;
 	/**
 	 * Constructor for 1p mode.
-	 * 
+	 *
 	 * @param level
 	 *            Current game level.
 	 * @param score
@@ -42,9 +42,9 @@ public class GameState {
 	 *            Ships destroyed until now.
 	 */
 	public GameState(final int level, final int score,
-					final int livesRemaining, final int bulletsShot,
-					final int shipsDestroyed) {
-		this.gameMode = 1;
+					 final int livesRemaining, final int bulletsShot,
+					 final int shipsDestroyed, final int gameMode) {
+		this.gameMode = gameMode;
 		this.level = level;
 		this.score = score;
 		this.livesRemaining1 = livesRemaining;
@@ -72,8 +72,8 @@ public class GameState {
 	 */
 	public GameState(final int level, final int score,
 					 final int livesRemaining1, final int livesRemaining2, final int bulletsShot1, final int bulletsShot2,
-					 final int shipsDestroyed, final int shipsDestroyed2) {
-		this.gameMode = 2;
+					 final int shipsDestroyed, final int shipsDestroyed2, final int gameMode) {
+		this.gameMode = gameMode;
 		this.level = level;
 		this.score = score;
 		this.livesRemaining1 = livesRemaining1;
@@ -84,6 +84,32 @@ public class GameState {
 		this.shipsDestroyed2 = shipsDestroyed2;
 	}
 
+
+	/**
+	 * Constructor for pvp mode.
+	 *
+	 * @param livesRemaining1
+	 *            player1's Lives currently remaining.
+	 * @param livesRemaining2
+	 *            player2's Lives currently remaining.
+	 * @param bulletsShot1
+	 *            Bullets shot until now from player1.
+	 * @param bulletsShot2
+	 *            Bullets shot until now from player2.
+	 * @param shipsDestroyed
+	 *            Ships destroyed until now.
+	 */
+	public GameState(final int livesRemaining1, final int livesRemaining2, final int bulletsShot1, final int bulletsShot2,
+					 final int shipsDestroyed, final int shipsDestroyed2, final int gameMode) {
+		this.gameMode = gameMode;
+		this.level = 1;
+		this.livesRemaining1 = livesRemaining1;
+		this.livesRemaining2 = livesRemaining2;
+		this.bulletsShot1 = bulletsShot1;
+		this.bulletsShot2 = bulletsShot2;
+		this.shipsDestroyed1 = shipsDestroyed;
+		this.shipsDestroyed2 = shipsDestroyed2;
+	}
 	/**
 	 * Getter for level.
 	 *

@@ -18,14 +18,11 @@ public class LoginScreen extends Screen {
 
 	/** Milliseconds between changes in user selection. */
 	private static final int SELECTION_TIME = 200;
-	private char[] name;
+	public final char[] name;
 	/** Character of players name selected for change. */
-	private int nameCharSelected;
+	public int nameCharSelected;
 	/** Time between changes in user selection. */
-
-	private Player player;
-
-	private Cooldown selectionCooldown;
+	private final Cooldown selectionCooldown;
 	/** Code of first mayus character. */
 	private static final int FIRST_CHAR = 65;
 	/** Code of last mayus character. */
@@ -71,53 +68,134 @@ public class LoginScreen extends Screen {
 		super.update();
 
 		draw();
-		if (this.selectionCooldown.checkFinished()
-				&& this.inputDelay.checkFinished()) {
-				if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)) {
-					this.nameCharSelected = this.nameCharSelected == 2 ? 0
-							: this.nameCharSelected + 1;
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
-					this.nameCharSelected = this.nameCharSelected == 0 ? 2
-							: this.nameCharSelected - 1;
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
-					this.name[this.nameCharSelected] =
-							(char) (this.name[this.nameCharSelected]
-									== LAST_CHAR ? FIRST_CHAR
-									: this.name[this.nameCharSelected] + 1);
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
-					this.name[this.nameCharSelected] =
-							(char) (this.name[this.nameCharSelected]
-									== FIRST_CHAR ? LAST_CHAR
-									: this.name[this.nameCharSelected] - 1);
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
-					try {
-						Player loadedPlayer = Core.getFileManager().loadPlayer(name);
-						if(loadedPlayer == null){
-							Core.getFileManager().saveNewPlayer(name);
-							logger.info("New player saved successfully");
-						} else {
-							Core.getFileManager().updateLoginTimeOfCurrentPlayer();
-							logger.info("Player loaded successfully");
-						}
-					} catch (IOException e) {
-						logger.warning("Couldn't load or save player! Error: " + e.getMessage());
-					}
 
-					// Proceed to main menu.
-					this.returnCode = 1;
-					this.isRunning = false;
-			}
+		if (isProcessInput()) {
+			processInput();
+		}
+	}
+
+	/**
+	 * Checks whether it's allowed to process user input.
+	 *
+	 * @return True if input processing is allowed, false otherwise.
+	 */
+	private boolean isProcessInput() {
+		return selectionCooldown.checkFinished() && inputDelay.checkFinished();
+	}
+
+	/**
+	 * Retrieves the key that is currently pressed.
+	 *
+	 * @return The keycode of the pressed key, or null if no key is pressed.
+	 */
+	private Integer getPressedKey() {
+		return inputManager.getKeyCode();
+	}
+
+	/**
+	 * Processes user input.
+	 */
+	private void processInput() {
+		Integer pressedKey = getPressedKey();
+
+		if (pressedKey != null) {
+			handleKeyPress(pressedKey);
+		}
+	}
+
+	/**
+	 * Handles key presses based on the given keycode.
+	 *
+	 * @param key The keycode of the pressed key.
+	 */
+	private void handleKeyPress(int key) {
+		switch (key) {
+			case KeyEvent.VK_RIGHT:
+				handleRightKey();
+				break;
+			case KeyEvent.VK_LEFT:
+				handleLeftKey();
+				break;
+			case KeyEvent.VK_UP:
+				handleUpKey();
+				break;
+			case KeyEvent.VK_DOWN:
+				handleDownKey();
+				break;
+			case KeyEvent.VK_SPACE:
+				handleSpaceKey();
+				break;
+			default:
+				break;
+		}
+	}
+
+	/** Handles right arrow key press */
+	public void handleRightKey() {
+		nameCharSelected = (nameCharSelected == 2) ? 0 : nameCharSelected + 1;
+		resetSelectionCooldown();
+	}
+
+	/** Handles left arrow key press */
+	public void handleLeftKey() {
+		nameCharSelected = (nameCharSelected == 0) ? 2 : nameCharSelected - 1;
+		resetSelectionCooldown();
+	}
+
+	/** Handles up arrow key press */
+	public void handleUpKey() {
+		updateNameChar(1);
+		resetSelectionCooldown();
+	}
+
+	/** Handles down arrow key press */
+	public void handleDownKey() {
+		updateNameChar(-1);
+		resetSelectionCooldown();
+	}
+
+	/**
+	 * Updates the selected character in the username based on the given offset.
+	 */
+	public void updateNameChar(int offset) {
+		name[nameCharSelected] = (char) ((name[nameCharSelected] == LAST_CHAR) ? FIRST_CHAR : name[nameCharSelected] + offset);
+	}
+
+	/** Handles the spacebar key press*/
+	private void handleSpaceKey() {
+		try {
+			processSpaceKey();
+		} catch (IOException e) {
+			handlePlayerFileException(e);
 		}
 
+		returnCode = 1;
+		isRunning = false;
 	}
+
+	/**
+	 * Saves a new player or loads an existing player based on the current username.
+	 */
+	public void processSpaceKey() throws IOException {
+		Player loadedPlayer = Core.getFileManager().loadPlayer(name);
+		if (loadedPlayer == null) {
+			Core.getFileManager().saveNewPlayer(name);
+			logger.info("New player saved successfully");
+		} else {
+			Core.getFileManager().updateLoginTimeOfCurrentPlayer();
+			logger.info("Player loaded successfully");
+		}
+	}
+
+	private void resetSelectionCooldown() {
+		selectionCooldown.reset();
+	}
+
+	private void handlePlayerFileException(IOException e) {
+		logger.warning("Couldn't load or save player! Error: " + e.getMessage());
+	}
+
+
 
 	/**
 	 * Draws the elements associated with the screen.

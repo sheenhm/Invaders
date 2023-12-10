@@ -102,27 +102,62 @@ public class ScoreScreen extends Screen {
 
         this.shipsDestroyed1 = gameState.getShipsDestroyed();
         this.isNewRecord = false;
-        try {
-            this.name = Core.getFileManager().getCurrentPlayer().getName().toCharArray();
-        } catch (IOException e) {
-            logger.warning("An error occurred while accessing player data: " + e.getMessage());
-        }
+        
+        // Initialize player name and selection-related variables
+        this.name = getPlayerName();
         this.nameCharSelected = 0;
         this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
         this.selectionCooldown.reset();
 
         AchievementManager.getInstance().checkScore(this.score);
 
+        // Load and update high scores
+        loadHighScores();
+
+        // Attempt to reset player items using the FileManager
+        resetPlayerItems();
+    }
+
+    /**
+     * Retrieves the player name from the file manager.
+     *
+     * @return The player name as a character array.
+     */
+    private char[] getPlayerName() {
+        try {
+            return Core.getFileManager().getCurrentPlayer().getName().toCharArray();
+        } catch (IOException e) {
+            logger.warning("An error occurred while accessing player data: " + e.getMessage());
+            return new char[0];
+        }
+    }
+
+    /**
+     * Loads high scores from the file manager and updates the new record status.
+     */
+    private void loadHighScores() {
         try {
             this.highScores = Core.getFileManager().loadHighScores(this.gameMode);
-            if (highScores.size() < MAX_HIGH_SCORE_NUM
-                    || highScores.get(highScores.size() - 1).getScore()
-                    < this.score)
-                this.isNewRecord = true;
-
+            updateNewRecordStatus();
         } catch (IOException e) {
             logger.warning("Couldn't load high scores!");
         }
+    }
+
+    /**
+     * Updates the new record status based on the current score and existing high scores.
+     */
+    private void updateNewRecordStatus() {
+        if (highScores.size() < MAX_HIGH_SCORE_NUM || highScores.get(highScores.size() - 1).getScore() < this.score) {
+            this.isNewRecord = true;
+        }
+    }
+
+    /**
+     * Attempts to reset player items using the FileManager.
+     * Logs a warning if the reset operation fails.
+     */
+    private void resetPlayerItems() {
         try {
             Core.getFileManager().resetPlayerItem();
         } catch (IOException e) {
@@ -149,51 +184,77 @@ public class ScoreScreen extends Screen {
 
         if (gameMode == 1) {
             draw();
-        } else {
+        }
+        else if(gameMode == 2){
             draw2();
         }
 
         if (this.inputDelay.checkFinished()) {
-            if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
-                // Return to main menu.
-                this.returnCode = 1;
-                this.isRunning = false;
-                saveScore(gameMode);
-            } else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
-                // Play again.
-                this.returnCode = 7;
-                this.isRunning = false;
-                saveScore(gameMode);
-            }
-
+            // Handles input during the game record screen, allowing navigation back to the main menu or restarting the game.
+            handleExitRecordScreenInput();
+            
             if (this.isNewRecord && this.selectionCooldown.checkFinished()) {
-                if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)) {
-                    this.nameCharSelected = this.nameCharSelected == 2 ? 0
-                            : this.nameCharSelected + 1;
-                    this.selectionCooldown.reset();
-                }
-                if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
-                    this.nameCharSelected = this.nameCharSelected == 0 ? 2
-                            : this.nameCharSelected - 1;
-                    this.selectionCooldown.reset();
-                }
-                if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
-                    this.name[this.nameCharSelected] =
-                            (char) (this.name[this.nameCharSelected]
-                                    == LAST_CHAR ? FIRST_CHAR
-                                    : this.name[this.nameCharSelected] + 1);
-                    this.selectionCooldown.reset();
-                }
-                if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
-                    this.name[this.nameCharSelected] =
-                            (char) (this.name[this.nameCharSelected]
-                                    == FIRST_CHAR ? LAST_CHAR
-                                    : this.name[this.nameCharSelected] - 1);
-                    this.selectionCooldown.reset();
-                }
+                // Handles player name input during the record phase
+                handlePlayerNameInput();
             }
         }
 
+    }
+
+    /**
+     * Handles input during the game record screen, allowing navigation back to the main menu or restarting the game.
+     */
+    private void handleExitRecordScreenInput() {
+        if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
+            // Return to the main menu.
+            this.returnCode = 1;
+            this.isRunning = false;
+            saveScore(gameMode);
+        } else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
+            // Play again.
+            this.returnCode = 7;
+            this.isRunning = false;
+            saveScore(gameMode);
+        }
+    }
+
+
+    /**
+     * Handles player name input during the record phase, allowing navigation and modification of the player's name.
+     */
+    private void handlePlayerNameInput() {
+        if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)) {
+            if (this.nameCharSelected == 2) {
+                this.nameCharSelected = 0;
+            } else {
+                this.nameCharSelected += 1;
+            }
+            this.selectionCooldown.reset();
+        }
+        if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
+            if (this.nameCharSelected == 0) {
+                this.nameCharSelected = 2;
+            } else {
+                this.nameCharSelected -= 1;
+            }
+            this.selectionCooldown.reset();
+        }
+        if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
+            if (this.name[this.nameCharSelected] == LAST_CHAR) {
+                this.name[this.nameCharSelected] = (char) FIRST_CHAR;
+            } else {
+                this.name[this.nameCharSelected] = (char) (this.name[this.nameCharSelected] + 1);
+            }
+            this.selectionCooldown.reset();
+        }
+        if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
+            if (this.name[this.nameCharSelected] == FIRST_CHAR) {
+                this.name[this.nameCharSelected] = (char) LAST_CHAR;
+            } else {
+                this.name[this.nameCharSelected] = (char) (this.name[this.nameCharSelected] - 1);
+            }
+            this.selectionCooldown.reset();
+        }
     }
 
     /**
