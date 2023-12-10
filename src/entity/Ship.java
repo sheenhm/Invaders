@@ -201,7 +201,7 @@ public class Ship extends Entity {
      *
      * @return Speed of the ship.
      */
-    public final int getSpeed() {
+    public final int getShipSpeed() {
         return speed;
     }
 
@@ -210,7 +210,7 @@ public class Ship extends Entity {
      *
      * @return Speed of the ship.
      */
-    public final void setSpeed(int sp) {
+    public final void setShipSpeed(int sp) {
         this.speed = sp;
     }
 
@@ -222,50 +222,27 @@ public class Ship extends Entity {
     }
 
     /**
-     * Getter for the ship's shooting frequency speed.
-     *
-     * @return Ship's shooting frequency speed.
-     */
-    public final Cooldown getShootingInterval() {
-        return this.shootingCooldown;
-    }
-
-    /**
-     * Setter for the ship's shooting frequency speed.
-     *
-     * @return Speed of the ship's shooting frequency.
-     */
-    public final void setShootingInterval(int cldwn) {
-        this.shootingCooldown = Core.getCooldown(cldwn);
-    }
-
-    /**
      * Re-Setter for the ship's shooting frequency speed.
      */
-    public final void resetShootingInterval() {
-        this.shootingCooldown = Core.getCooldown(shootingInterval);
-    }
 
     public final boolean getItemImpact() {
         return (this.speed == this.originalSpeed + this.ITEM_SPEED_UP_VALUE || this.Invincible || this.existAuxiliaryShips);
     }
 
     public final void itemImpactUpdate() {
-        if (this.speed == this.originalSpeed + this.ITEM_SPEED_UP_VALUE) {
-            if (this.speedupCooldown.checkFinished()) resetSpeed();
-        } else if (this.Invincible) {
-            if (this.invincibleCooldown.checkFinished()) {
-                Color c = this.getColor();
-                if (c == Color.BLUE) {
-                    Invincible = false;
-                    changeColor(Color.GREEN);
-                } else if (c == Color.magenta) {
-                    Invincible = false;
-                    changeColor(Color.RED);
-                }
+        if ((this.speed == this.originalSpeed + this.ITEM_SPEED_UP_VALUE) && this.speedupCooldown.checkFinished()) {
+            resetSpeed();
+        } else if (this.Invincible && this.invincibleCooldown.checkFinished()) {
+            if (this.getColor() == Color.BLUE) {
+                Invincible = false;
+                this.changeColor(Color.GREEN);
+            } else if (this.getColor() == Color.magenta) {
+                Invincible = false;
+                this.changeColor(Color.RED);
             }
-        } else if (this.existAuxiliaryShips) {
-            if (this.auxiliaryCooldown.checkFinished()) setExistAuxiliaryShips(false);
+        }
+        else if (this.existAuxiliaryShips && this.auxiliaryCooldown.checkFinished()) {
+            setExistAuxiliaryShips(false);
         }
     }
 
@@ -290,13 +267,11 @@ public class Ship extends Entity {
     }
 
     public final void runInvincible() {
-        Color c = this.getColor();
-
-        if (c == Color.GREEN || c == Color.BLUE) {
+        if (this.getColor() == Color.GREEN || this.getColor() == Color.BLUE) {
             this.invincibleCooldown.reset();
             this.Invincible = true;
             this.changeColor(Color.BLUE);
-        } else if (c == Color.RED || c == Color.magenta) {
+        } else if (this.getColor() == Color.RED || this.getColor() == Color.magenta) {
             this.invincibleCooldown.reset();
             this.Invincible = true;
             this.changeColor(Color.magenta);
@@ -331,7 +306,6 @@ public class Ship extends Entity {
         for (Ship auxiliaryShip : auxiliaryShips) {
             auxiliaryShip.applyFasterShootingItem();
         }
-
     }
 
     public void applyLifeIncreaseItem(boolean isUsed) {
@@ -343,10 +317,10 @@ public class Ship extends Entity {
     }
 
     public void setOriginalSpeed(int originalSpeed) {
-        if(hasPurchasedSpeedItem){
+        if (hasPurchasedSpeedItem) {
             this.originalSpeed = originalSpeed;
             this.speed = this.originalSpeed + 2;
-        }else {
+        } else {
             this.originalSpeed = originalSpeed;
             this.speed = this.originalSpeed;
         }

@@ -1,6 +1,8 @@
 package entity;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.logging.Logger;
 
 import engine.*;
@@ -170,32 +172,24 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 					}
 				}
 
-				switch (spriteType)
-				{
-					case EnemyShipA1:
-						enemyShip = new EnemyShipA((SEPARATION_DISTANCE
-								* this.enemyShips.indexOf(column))
-								+ setXpos, (SEPARATION_DISTANCE * i)
-								+ positionY, spriteType,gameState);
-						break;
-					case EnemyShipB1:
-						enemyShip = new EnemyShipB((SEPARATION_DISTANCE
-								* this.enemyShips.indexOf(column))
-								+ setXpos, (SEPARATION_DISTANCE * i)
-								+ positionY, spriteType,gameState);
-						break;
-					case EnemyShipC1:
-						enemyShip = new EnemyShipC((SEPARATION_DISTANCE
-								* this.enemyShips.indexOf(column))
-								+ setXpos, (SEPARATION_DISTANCE * i)
-								+ positionY, spriteType,gameState);
-						break;
-					default:
-						enemyShip = new EnemyShip((SEPARATION_DISTANCE
-								* this.enemyShips.indexOf(column))
-								+ setXpos, (SEPARATION_DISTANCE * i)
-								+ positionY, spriteType,gameState);
-				}
+                enemyShip = switch (spriteType) {
+                    case EnemyShipA1 -> new EnemyShip((SEPARATION_DISTANCE
+                            * this.enemyShips.indexOf(column))
+                            + setXpos, (SEPARATION_DISTANCE * i)
+                            + positionY, spriteType, gameState, 0.8, 0.5, 0, 30);
+                    case EnemyShipB1 -> new EnemyShip((SEPARATION_DISTANCE
+                            * this.enemyShips.indexOf(column))
+                            + setXpos, (SEPARATION_DISTANCE * i)
+                            + positionY, spriteType, gameState, 0.4, 1, 0.25, 10);
+                    case EnemyShipC1 -> new EnemyShip((SEPARATION_DISTANCE
+                            * this.enemyShips.indexOf(column))
+                            + setXpos, (SEPARATION_DISTANCE * i)
+                            + positionY, spriteType, gameState, 0.1, 2, 0.5, 20);
+                    default -> new EnemyShip((SEPARATION_DISTANCE
+                            * this.enemyShips.indexOf(column))
+                            + setXpos, (SEPARATION_DISTANCE * i)
+                            + positionY, spriteType, gameState, 1, 1, 0, 30);
+                };
 				column.add(enemyShip);
 				this.shipCount++;
 				ship_index++;
@@ -386,7 +380,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 					} else {
 						enemyShip.move(movementX, movementY);
 					}
-					enemyShip.update();
+					enemyShip.update(enemyShip.spriteType);
 				}
 		}
 	}

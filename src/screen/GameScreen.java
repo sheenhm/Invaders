@@ -356,10 +356,11 @@ public class GameScreen extends Screen {
 					boolean moveRight = inputManager.isKeyDown(Core.getKeySettingCode(1));
 					boolean moveLeft = inputManager.isKeyDown(Core.getKeySettingCode(0));
 
-					boolean isRightBorder = this.ship.getPositionX()
-							+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
-					boolean isLeftBorder = this.ship.getPositionX()
-							- this.ship.getSpeed() < 1;
+                    boolean isRightBorder = this.ship.getPositionX()
+                            + this.ship.getWidth() + this.ship.getShipSpeed() > this.width - 1;
+                    boolean isLeftBorder = this.ship.getPositionX()
+                            - this.ship.getShipSpeed() < 1;
+
 
 					if (moveRight && !isRightBorder) {
 						this.ship.moveRight();
@@ -427,50 +428,52 @@ public class GameScreen extends Screen {
 						if (this.ship.getItemImpact()) {
 							this.ship.itemImpactUpdate();
 						}
-						if (this.ship.isExistAuxiliaryShips()) {
-							auxiliaryShips.get(0).setPositionX(ship.getPositionX() - 25);
-							auxiliaryShips.get(0).setPositionY(ship.getPositionY());
-							auxiliaryShips.get(1).setPositionX(ship.getPositionX() + 25);
-							auxiliaryShips.get(1).setPositionY(ship.getPositionY());
-						} else {
-							auxiliaryShips.get(0).destroy();
-							auxiliaryShips.get(1).destroy();
-						}
-						if (inputManager.isKeyDown(Core.getKeySettingCode(7)))
-							if (this.ship.itemCoolTime())
-								useItem(this.ship.getItemQueue().deque(), this.ship);
-					}
+            
+                        if (this.ship.isExistAuxiliaryShips()) {
+                            auxiliaryShips.get(0).setPositionX(ship.getPositionX() - 25);
+                            auxiliaryShips.get(0).setPositionY(ship.getPositionY());
+                            auxiliaryShips.get(1).setPositionX(ship.getPositionX() + 25);
+                            auxiliaryShips.get(1).setPositionY(ship.getPositionY());
+                        } else {
+                            auxiliaryShips.get(0).destroy();
+                            auxiliaryShips.get(1).destroy();
+                        }
+                        if (inputManager.isKeyDown(Core.getKeySettingCode(7)))
+                            if (this.ship.itemCoolTime())
+                                useItem(this.ship.getItemQueue().deque(), this.ship);
+                    }
 
 
-				} else if (gameState.getMode() == 2 && !(this.ship.isDestroyed() && this.ship2.isDestroyed())) {
-					boolean moveRight1p = inputManager.isKeyDown(Core.getKeySettingCode(1));
-					boolean moveLeft1p = inputManager.isKeyDown(Core.getKeySettingCode(0));
+                } else if (gameState.getMode() == 2 && !(this.ship.isDestroyed() && this.ship2.isDestroyed())) {
+                    boolean moveRight1p = inputManager.isKeyDown(Core.getKeySettingCode(1));
+                    boolean moveLeft1p = inputManager.isKeyDown(Core.getKeySettingCode(0));
 
-					boolean moveRight2p = inputManager.isKeyDown(Core.getKeySettingCode(9));
-					boolean moveLeft2p = inputManager.isKeyDown(Core.getKeySettingCode(8));
+                    boolean moveRight2p = inputManager.isKeyDown(Core.getKeySettingCode(9));
+                    boolean moveLeft2p = inputManager.isKeyDown(Core.getKeySettingCode(8));
 
-					boolean isRightBorder1p = this.ship.getPositionX()
-							+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
-					boolean isLeftBorder1p = this.ship.getPositionX()
-							- this.ship.getSpeed() < 1;
+                    boolean isRightBorder1p = this.ship.getPositionX()
+                            + this.ship.getWidth() + this.ship.getShipSpeed() > this.width - 1;
+                    boolean isLeftBorder1p = this.ship.getPositionX()
+                            - this.ship.getShipSpeed() < 1;
 
-					boolean isRightBorder2p = this.ship2.getPositionX()
-							+ this.ship2.getWidth() + this.ship2.getSpeed() > this.width - 1;
-					boolean isLeftBorder2p = this.ship2.getPositionX()
-							- this.ship2.getSpeed() < 1;
+                    boolean isRightBorder2p = this.ship2.getPositionX()
+                            + this.ship2.getWidth() + this.ship2.getShipSpeed() > this.width - 1;
+                    boolean isLeftBorder2p = this.ship2.getPositionX()
+                            - this.ship2.getShipSpeed() < 1;
 
-					if (moveRight1p && !isRightBorder1p && (this.lives > 0)) {
-						this.ship.moveRight();
-					}
-					if (moveRight2p && !isRightBorder2p && (this.lives2 > 0)) {
-						this.ship2.moveRight();
-					}
-					if (moveLeft1p && !isLeftBorder1p && (this.lives > 0)) {
-						this.ship.moveLeft();
-					}
-					if (moveLeft2p && !isLeftBorder2p && (this.lives2 > 0)) {
-						this.ship2.moveLeft();
-					}
+                    if (moveRight1p && !isRightBorder1p && (this.lives > 0)) {
+                        this.ship.moveRight();
+                    }
+                    if (moveRight2p && !isRightBorder2p && (this.lives2 > 0)) {
+                        this.ship2.moveRight();
+                    }
+                    if (moveLeft1p && !isLeftBorder1p && (this.lives > 0)) {
+                        this.ship.moveLeft();
+                    }
+                    if (moveLeft2p && !isLeftBorder2p && (this.lives2 > 0)) {
+                        this.ship2.moveLeft();
+                    }
+          
 					if (this.ship.getItemImpact() || this.ship2.getItemImpact()) {
 						this.ship.itemImpactUpdate();
 						this.ship2.itemImpactUpdate();
@@ -1148,7 +1151,7 @@ public class GameScreen extends Screen {
 		if (per>0 && !this.levelFinished) {
 			if (per == 1 && !speedBoosted) { // s 연타 -> 1초간 속도 빨라지기
 				originalSpeed = ship.getOriginalSpeed();
-				ship.setSpeed(originalSpeed + 2);
+				ship.setShipSpeed(originalSpeed + 2);
 				this.logger.info("SpeedUp");
 
 				ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
@@ -1171,7 +1174,7 @@ public class GameScreen extends Screen {
 				this.bullet_count+=3;
 			}else if (per == 3 && !speedBoosted) { // s 연타 -> 1초간 속도 빨라지기
 				originalSpeed =  ship2.getOriginalSpeed();
-				ship2.setSpeed(originalSpeed + 2);
+				ship2.setShipSpeed(originalSpeed + 2);
 				this.logger.info("SpeedUp");
 
 				ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
