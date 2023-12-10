@@ -139,8 +139,19 @@ public class Ship extends Entity {
     public final boolean shoot(final Set<Bullet> bullets, final int shooter) {
         if (this.shootingCooldown.checkFinished()) {
             this.shootingCooldown.reset();
-            bullets.add(BulletPool.getBullet(positionX + this.width / 2,
-                    positionY, BULLET_SPEED, shooter));
+            if(shooter == 1) {
+                bullets.add(BulletPool.getBullet(positionX + this.width / 2,
+                        positionY - 10, BULLET_SPEED, shooter));
+            }
+            //슈팅
+            if(shooter == 2) {
+                bullets.add(BulletPool.getBullet(positionX + this.width / 2,
+                        positionY - 10, BULLET_SPEED, shooter));
+            }
+            if(shooter == 3) {
+                bullets.add(BulletPool.getBullet(positionX + this.width / 2,
+                        positionY + 30, -BULLET_SPEED, shooter));
+            }
             return true;
         }
         return false;
